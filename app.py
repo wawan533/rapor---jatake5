@@ -9,9 +9,7 @@ if 'rekap_data' not in st.session_state:
 
 st.set_page_config(page_title="Input Nilai ASTS - SDN Jatake 5", layout="wide")
 st.title("Input Nilai ASTS - SDN Jatake 5")
-
 col_kiri, col_kanan = st.columns([1, 3])
-
 with col_kiri:
     st.subheader("A. Identitas Siswa")
     nama = st.text_input("Nama Peserta Didik", value="")
@@ -24,20 +22,9 @@ with col_kiri:
     izin = st.number_input("Izin", 0, 100, 0)
     alpa = st.number_input("Tanpa Keterangan", 0, 100, 0)
     catatan = st.text_area("Catatan Wali Kelas")
-
 with col_kanan:
     st.subheader("Nilai")
-    mapel_list = [
-        ("Agama dan Budi Pekerti", "agama"),
-        ("Pancasila", "pancasila"),
-        ("Bahasa Indonesia", "bindo"),
-        ("Matematika", "mtk"),
-        ("IPAS", "ipas"),
-        ("Seni Budaya / Seni Rupa", "seni"),
-        ("PJOK", "pjok"),
-        ("Budi Pekerti", "budi"),
-        ("Bahasa Inggris", "inggris"),
-    ]
+    mapel_list = [("Agama dan Budi Pekerti", "agama"),("Pancasila", "pancasila"),("Bahasa Indonesia", "bindo"),("Matematika", "mtk"),("IPAS", "ipas"),("Seni Budaya / Seni Rupa", "seni"),("PJOK", "pjok"),("Budi Pekerti", "budi"),("Bahasa Inggris", "inggris"),]
     nilai_data = {}
     cols = st.columns(3)
     for i, (label, key) in enumerate(mapel_list):
@@ -47,7 +34,6 @@ with col_kanan:
             kkm = c1.number_input(f"KKM {label}", 0, 100, 75, key=f"kkm_{key}")
             nilai = c2.number_input(f"Nilai {label}", 0, 100, 85, key=f"nilai_{key}")
             nilai_data[label] = {"kkm": kkm, "nilai": nilai}
-
     if st.button("💾 SIMPAN & BUAT PDF", type="primary", use_container_width=True):
         baris = {"Waktu": datetime.now().strftime("%d-%m-%Y %H:%M"), "Nama": nama, "NISN": nisn, "Kelas": kelas, "Semester": semester, "Sakit": sakit, "Izin": izin, "Alpa": alpa}
         for mp, v in nilai_data.items():
@@ -59,7 +45,7 @@ with col_kanan:
         pdf.set_font("Arial", "", 11); pdf.cell(0, 8, f"NISN: {nisn} | Kelas: {kelas} | Semester: {semester}", ln=True); pdf.ln(5)
         for mp, v in nilai_data.items(): pdf.cell(0, 7, f"{mp}: KKM {v['kkm']} - Nilai {v['nilai']}", ln=True)
         pdf.ln(5); pdf.cell(0, 7, f"Kehadiran S:{sakit} I:{izin} A:{alpa}", ln=True); pdf.multi_cell(0, 7, f"Catatan: {catatan}")
-        pdf_bytes = pdf.output(dest="S").encode("latin-1")
+        pdf_bytes = bytes(pdf.output())
         st.download_button("📄 DOWNLOAD PDF RAPOR INI", data=pdf_bytes, file_name=f"Rapor_{nama}_{kelas}.pdf", mime="application/pdf")
 
 st.divider()
