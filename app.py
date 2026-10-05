@@ -63,7 +63,9 @@ with col_kanan:
 
         pdf = FPDF('P', 'mm', 'A4')
         pdf.add_page()
-        # KOP
+        # KOP DENGAN LOGO
+        if os.path.exists("logo.png"):
+        pdf.image("logo.png", x=15, y=8, w=18)
         pdf.set_font("Arial", "B", 11)
         pdf.cell(0, 5, "PEMERINTAH KOTA TANGERANG", align="C", ln=True)
         pdf.cell(0, 5, "DINAS PENDIDIKAN", align="C", ln=True)
